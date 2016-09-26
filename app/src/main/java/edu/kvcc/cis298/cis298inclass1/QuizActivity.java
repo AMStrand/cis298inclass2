@@ -2,6 +2,7 @@ package edu.kvcc.cis298.cis298inclass1;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;        // Added to be able to use Log
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
+
+        // Java vs C# note: final = const
+    private static final String TAG = "QuizActivity";   // use with log.d(TAG, "comment to be saved")
+    private static final String KEY_INDEX = "index";
 
         // Variable declarations to hold the widget controls for the layout:
     private Button mTrueButton;
@@ -36,8 +41,19 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-            // Use findViewById to get a reference to the textview in the layout:
+            // Log out that the onCreate method was fired (d stands for debug)
+        Log.d(TAG, "onCreate(Bundle) called");
+
+            // Use findViewById to get a reference to the TextView in the layout:
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+
+            // Prevent the app from resetting to the first question when screen rotates:
+            // Check the Bundle to see if there is a savedInstanceState - if so, fetch
+            // out the index to save as mCurrentIndex:
+        if (savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX);
+        }
+
             // Update the question:
         UpdateQuestion();
 
@@ -110,9 +126,52 @@ public class QuizActivity extends AppCompatActivity {
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 
+        // This method is called right before onPause() is called.
+        // This is where you should use the passed in Bundle to save the status.
+        // The Bundle has methods in it to put values in a key => value way.
+        // We are using putInt to store the mCurrentIndex under the KEY_INDEX.
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.i(TAG, "onSavedInstanceState() called");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+    }
+
+        // The following methods log the activities stated:
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart() called");
+    }
+
+        // We don't need these:
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-            // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
