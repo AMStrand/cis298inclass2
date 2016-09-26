@@ -6,12 +6,32 @@ package edu.kvcc.cis298.cis298inclass1;
 public class Question {
 
     private int mTextResID;
-    private boolean mAnswerTrue;
+    private int mCorrectAnswerResId;
+    private int[] mChoiceResIds;
 
-        // After typing the next part, right click and "Generate" to get the following getters and setters.
-    public Question(int textResID, boolean answerTrue) {
+
+    // After typing the next part, right click and "Generate" to get the following getters and setters.
+    public Question(int textResID, int correctAnswerResId, int[] choiceResIds) {
         mTextResID = textResID;
-        mAnswerTrue = answerTrue;
+        mCorrectAnswerResId = correctAnswerResId;
+        mChoiceResIds = choiceResIds;
+
+    }
+
+    public int getCorrectAnswerResId() {
+        return mCorrectAnswerResId;
+    }
+
+    public void setCorrectAnswerResId(int correctAnswerResId) {
+        mCorrectAnswerResId = correctAnswerResId;
+    }
+
+    public int[] getChoiceResIds() {
+        return mChoiceResIds;
+    }
+
+    public void setChoiceResIds(int[] choiceResIds) {
+        mChoiceResIds = choiceResIds;
     }
 
         // These are technically not properties - this is Java convention for getters and setters:
@@ -23,11 +43,5 @@ public class Question {
         this.mTextResID = mTextResID;
     }
 
-    public boolean ismAnswerTrue() {
-        return mAnswerTrue;
-    }
 
-    public void setmAnswerTrue(boolean mAnswerTrue) {
-        this.mAnswerTrue = mAnswerTrue;
-    }
 }
