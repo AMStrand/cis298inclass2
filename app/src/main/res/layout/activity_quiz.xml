@@ -8,9 +8,13 @@
         android:id="@+id/question_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:padding="24dp">
 
     </TextView>
+=======
+        android:padding="24dp" />
+>>>>>>> fa18512f5572484abe4715661e3bf2df77398547
 
     <LinearLayout
         android:layout_width="wrap_content"

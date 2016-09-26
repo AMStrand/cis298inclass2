@@ -1,6 +1,7 @@
 package edu.kvcc.cis298.cis298inclass1;
 
 /**
+<<<<<<< HEAD
  * Created by amahler4096 on 9/19/2016.
  */
 public class Question {
@@ -29,5 +30,33 @@ public class Question {
 
     public void setmAnswerTrue(boolean mAnswerTrue) {
         this.mAnswerTrue = mAnswerTrue;
+=======
+ * Created by dbarnes on 9/19/2016.
+ */
+public class Question {
+
+    private int mTextResId;
+    private boolean mAnswerTrue;
+
+    public Question(int textResId, boolean answerTrue) {
+        mTextResId = textResId;
+        mAnswerTrue = answerTrue;
+    }
+
+    public int getTextResId() {
+        return mTextResId;
+    }
+
+    public void setTextResId(int textResId) {
+        mTextResId = textResId;
+    }
+
+    public boolean isAnswerTrue() {
+        return mAnswerTrue;
+    }
+
+    public void setAnswerTrue(boolean answerTrue) {
+        mAnswerTrue = answerTrue;
+>>>>>>> fa18512f5572484abe4715661e3bf2df77398547
     }
 }

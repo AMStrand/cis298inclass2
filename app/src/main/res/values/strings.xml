@@ -10,8 +10,14 @@
     <string name="question_americas">The Amazon River is the longest river.</string>
     <string name="question_asia">Lake Baikal is the world\'s oldest and deepest freshwater lake.</string>
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> fa18512f5572484abe4715661e3bf2df77398547
     <string name="true_button">True</string>
     <string name="false_button">False</string>
+    <string name="next_button">Next</string>
 
     <string name="next_button">Next Question</string>
 
