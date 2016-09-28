@@ -60,17 +60,19 @@ public class CheatActivity extends AppCompatActivity {
                 else {
                     mAnswerTextView.setText(R.string.false_button);
                 }
+                    // Set the return data for the activity:
                 setAnswerShownResult(true);
             }
         });
     }
 
+        // Starts a new intent to use as the object containing activity result data.
     private void setAnswerShownResult(boolean isAnswerShown) {
             // New Intent to store data:
         Intent data = new Intent();
             // Put in whether the answer is shown:
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
-            // Set result to ok and add data info:
+            // Set result to "ok" (other option is "cancelled") and add data info:
         setResult(RESULT_OK, data);
     }
 }
