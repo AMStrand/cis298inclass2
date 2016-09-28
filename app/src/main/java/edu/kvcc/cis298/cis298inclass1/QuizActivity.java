@@ -1,8 +1,10 @@
 package edu.kvcc.cis298.cis298inclass1;
 
+import android.app.Activity;
+import android.content.Intent;  // Added to be able to use Intent (switch activities)
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;        // Added to be able to use Log
+import android.util.Log;        // Added to be able to use Log (add specific messages to log)
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,14 +14,16 @@ import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
-        // Java vs C# note: final = const
+        // String keys for the bundle:                    *Java vs C# note: final = const
     private static final String TAG = "QuizActivity";   // use with log.d(TAG, "comment to be saved")
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
         // Variable declarations to hold the widget controls for the layout:
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
 
         // Question bank array generation with new instances of the Question class:
@@ -35,6 +39,8 @@ public class QuizActivity extends AppCompatActivity {
 
         // Declare a currentIndex variable for the current question index and initialize to 0:
     private int mCurrentIndex = 0;
+        // Bool variable for whether cheat:
+    private boolean mIsCheater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +96,46 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                     // Increment the index and mod it by the length of the array (loops):
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                    // Reset cheater status for new question:
+                mIsCheater = false;
                     // Update the question:
                 UpdateQuestion();
             }
         });
 
+            // Cheat Button - used to launch the Cheat activity
+        mCheatButton = (Button) findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                    // Get whether the current answer is true:
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].ismAnswerTrue();
+                    // Make the intent object and ask the Cheat Activity to return an Intent
+                    // that can get the CheatActivity launched (passes in package info and if answer is true):
+                Intent i = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                    // Use the intent object to start a new activity, AND receive a result:
+                startActivityForResult(i, REQUEST_CODE_CHEAT);
+            }
+        });
+    }
 
+        // Triggers upon return from a different activity:
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            // The result of the previous activity did not end with a RESULT_OK status, so don't do work:
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+            // If the request code used when the cheat activity was started matches that being sent back here,
+            // do work related to the cheat activity (otherwise it's a different activity):
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            if (data  == null) {
+                return;
+            }
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
     }
 
     private void UpdateQuestion() {
@@ -107,22 +147,26 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void checkAnswer (boolean userPressedTrue) {
-            // Sets the bool to the same as whether the question is T or F:
+        // Sets the bool to the same as whether the question is T or F:
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].ismAnswerTrue();
 
-            // Integer to hold the resource ID of the correct/incorrect message:
+        // Integer to hold the resource ID of the correct/incorrect message:
         int messageResId = 0;
 
-            // If the answer is the correct answer, set toast message:
-        if (userPressedTrue == answerIsTrue) {
-            messageResId = R.string.correct_toast;
-        }
-        else
-        {
-            messageResId = R.string.incorrect_toast;
-        }
+            // If they went to the cheat activity and looked at the answer,
+            // toast that cheating was wrong.  Otherwise, follow normal correct/incorrect decision:
+        if (mIsCheater) {
+            messageResId = R.string.judgement_toast;
+        } else {
 
-            // Display toast message:
+            // If the answer is the correct answer, set toast message:
+            if (userPressedTrue == answerIsTrue) {
+                messageResId = R.string.correct_toast;
+            } else {
+                messageResId = R.string.incorrect_toast;
+            }
+        }
+        // Display toast message:
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 
